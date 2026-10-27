@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Countable or Uncountable? เกมทบทวน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e8f4ff;--card:#ffffff;--ink:#1d2b4a;--soft:#5b6a8a;
+  --count:#2f6fed;--count-bg:#dce8ff;--unc:#e8742b;--unc-bg:#ffe8d6;
+  --good:#1f9d63;--good-bg:#d9f5e6;--oops:#8a5cd6;--oops-bg:#ece3fb;--bar:#2f6fed;--line:#c9d8ee;
+  color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101a30;--card:#1a2744;--ink:#eef3ff;--soft:#a5b3d3;
+  --count:#7aa5ff;--count-bg:#22345f;--unc:#ffa465;--unc-bg:#4a3220;
+  --good:#5fdc9f;--good-bg:#1b4132;--oops:#bfa0ff;--oops-bg:#33284f;--bar:#7aa5ff;--line:#2c3c63;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#101a30;--card:#1a2744;--ink:#eef3ff;--soft:#a5b3d3;
+  --count:#7aa5ff;--count-bg:#22345f;--unc:#ffa465;--unc-bg:#4a3220;
+  --good:#5fdc9f;--good-bg:#1b4132;--oops:#bfa0ff;--oops-bg:#33284f;--bar:#7aa5ff;--line:#2c3c63;color-scheme:dark;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Mali","Sarabun","Noto Sans Thai",system-ui,sans-serif;font-size:17px;line-height:1.55;min-height:100vh;display:flex;justify-content:center;padding:16px}
+main{width:100%;max-width:560px}
+.card{background:var(--card);border-radius:24px;padding:22px;border:2px solid var(--line)}
+h1{font-size:1.7rem;line-height:1.25;margin:0 0 8px}
+p{margin:0 0 12px}
+.row{display:flex;gap:12px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:18px;padding:14px 18px;cursor:pointer;color:#fff;background:var(--count);width:100%;font-size:1.05rem}
+.btn:focus-visible,.pick:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.btn:active,.pick:active{transform:scale(.97)}
+.rule{display:flex;gap:10px;margin:14px 0}
+.rule div{flex:1;border-radius:16px;padding:12px;font-size:.95rem}
+.rule .c{background:var(--count-bg)}.rule .u{background:var(--unc-bg)}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
+.pill{background:var(--count-bg);color:var(--count);border-radius:999px;padding:4px 14px}
+.track{height:14px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:18px}
+.fill{height:100%;width:100%;background:var(--bar);border-radius:999px;transition:width .1s linear,background .3s}
+.fill.low{background:var(--unc)}
+.stage{text-align:center;padding:6px 0 14px}
+.emoji{font-size:5.5rem;line-height:1.1}
+.word{font-size:2.6rem;font-weight:700;margin:4px 0 0;line-height:1.2}
+.th{color:var(--soft);margin:0}
+.ask{text-align:center;color:var(--soft);margin:6px 0 12px}
+.pick{font:inherit;font-weight:700;border:3px solid transparent;border-radius:20px;padding:16px 8px;cursor:pointer;flex:1;font-size:1.1rem;color:var(--ink);line-height:1.3}
+.pick small{display:block;font-weight:400;font-size:.9rem}
+.pick.c{background:var(--count-bg);color:var(--count)}.pick.u{background:var(--unc-bg);color:var(--unc)}
+.pick[disabled]{cursor:default;opacity:.55}
+.pick.right{opacity:1;border-color:var(--good);box-shadow:0 0 0 3px var(--good-bg)}
+.fb{border-radius:18px;padding:14px 16px;margin-top:16px}
+.fb.ok{background:var(--good-bg)}.fb.no{background:var(--oops-bg)}
+.fb b.t{display:block;font-size:1.15rem;margin-bottom:4px}
+.fb .ex{font-style:italic;color:var(--soft)}
+.fb .btn{margin-top:10px}
+.big{font-size:3.2rem;font-weight:700;margin:0;line-height:1.1;text-align:center}
+.stars{font-size:2.4rem;text-align:center;letter-spacing:6px}
+.rev{background:var(--oops-bg);border-radius:16px;padding:12px 14px;margin:12px 0}
+.rev span{display:inline-block;background:var(--card);border-radius:999px;padding:2px 12px;margin:3px 4px 3px 0;font-weight:600}
+.hide{display:none}
+@media (prefers-reduced-motion:reduce){.fill,.btn,.pick{transition:none}}
+@media (max-width:420px){.word{font-size:2.2rem}.emoji{font-size:4.5rem}}
+</style>
+</head>
+<body>
+<main>
+
+<section class="card" id="start">
+  <h1>🛒 Countable หรือ Uncountable?</h1>
+  <p>เกมทบทวนสั้น ๆ 10 ข้อ ข้อละ 20 วินาที ตอบถูกได้ 10 คะแนน ผิดไม่เป็นไร เรามีเฉลยให้ทุกข้อ!</p>
+  <div class="rule">
+    <div class="c"><b>Countable</b><br>นับได้ เป็นชิ้น ๆ<br>a pen, two pens</div>
+    <div class="u"><b>Uncountable</b><br>นับไม่ได้ ต้องมีภาชนะ<br>a glass of water</div>
+  </div>
+  <p>จับคู่แต่ละคำให้ถูกกลุ่ม แล้วไปดูกันเลย</p>
+  <button class="btn" id="go">เริ่มเล่น</button>
+</section>
+
+<section class="card hide" id="play" aria-live="polite">
+  <div class="top"><span class="pill" id="qno">ข้อ 1/10</span><span class="pill" id="score">⭐ 0</span></div>
+  <div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div>
+  <div class="stage">
+    <div class="emoji" id="emoji" aria-hidden="true"></div>
+    <p class="word" id="word"></p>
+    <p class="th" id="th"></p>
+  </div>
+  <p class="ask">คำนี้อยู่กลุ่มไหนนะ?</p>
+  <div class="row">
+    <button class="pick c" id="bc">Countable<small>นับได้</small></button>
+    <button class="pick u" id="bu">Uncountable<small>นับไม่ได้</small></button>
+  </div>
+  <div class="fb hide" id="fb"></div>
+</section>
+
+<section class="card hide" id="end">
+  <h1 style="text-align:center">จบเกมแล้ว เก่งมาก! 🎉</h1>
+  <div class="stars" id="stars"></div>
+  <p class="big" id="final"></p>
+  <p style="text-align:center" id="msg"></p>
+  <div class="rev hide" id="rev"><b>คำที่ลองทบทวนอีกนิด:</b><br><span></span></div>
+  <button class="btn" id="again">เล่นอีกครั้ง</button>
+</section>
+
+</main>
+<script>
+var Q=[
+{w:"apple",e:"🍎",t:"แอปเปิล",c:1,why:"แอปเปิลนับเป็นลูก ๆ ได้ one apple, two apples",ex:"I have two apples."},
+{w:"water",e:"💧",t:"น้ำ",c:0,why:"น้ำนับเป็นลูกไม่ได้ ต้องนับด้วยภาชนะ เช่น a glass of water",ex:"I drink some water."},
+{w:"pencil",e:"✏️",t:"ดินสอ",c:1,why:"ดินสอนับเป็นแท่งได้ one pencil, three pencils",ex:"She has three pencils."},
+{w:"rice",e:"🍚",t:"ข้าว",c:0,why:"เม็ดข้าวเล็กและเยอะมาก นับไม่ไหว ใช้ a bowl of rice แทน",ex:"I eat some rice."},
+{w:"egg",e:"🥚",t:"ไข่",c:1,why:"ไข่นับเป็นฟองได้ one egg, two eggs",ex:"I eat an egg for breakfast."},
+{w:"milk",e:"🥛",t:"นม",c:0,why:"นมเป็นของเหลว นับเป็นลูกไม่ได้ ใช้ a glass of milk",ex:"We need some milk."},
+{w:"chair",e:"🪑",t:"เก้าอี้",c:1,why:"เก้าอี้นับเป็นตัวได้ one chair, four chairs",ex:"There are four chairs."},
+{w:"sugar",e:"🧂",t:"น้ำตาล",c:0,why:"น้ำตาลเป็นผงเล็ก ๆ นับไม่ได้ ใช้ a spoon of sugar",ex:"I put some sugar in my tea."},
+{w:"banana",e:"🍌",t:"กล้วย",c:1,why:"กล้วยนับเป็นลูกได้ one banana, two bananas",ex:"He eats a banana."},
+{w:"bread",e:"🍞",t:"ขนมปัง",c:0,why:"คำว่า bread นับไม่ได้ ต้องใช้ a slice of bread (ขนมปังหนึ่งแผ่น)",ex:"I want some bread."}
+];
+var CHEER=["เก่งมาก! 🎉","ใช่เลย! 👏","ถูกต้อง! ✨","สุดยอด! 🌟","เยี่ยมไปเลย! 💪"];
+var OOPS=["ไม่เป็นไรนะ ลองดูเฉลยกัน 😊","เกือบแล้ว! มาดูกัน 💙","ข้อนี้ใครก็พลาดได้ มาดูเฉลยกัน 🌈"];
+var TIME=20,i=0,score=0,left=TIME,tm=null,locked=false,missed=[];
+var $=function(id){return document.getElementById(id)};
+function show(id){["start","play","end"].forEach(function(s){$(s).classList.toggle("hide",s!==id)})}
+function start(){i=0;score=0;missed=[];show("play");load()}
+function load(){
+  var q=Q[i];locked=false;
+  $("qno").textContent="ข้อ "+(i+1)+"/"+Q.length;
+  $("score").textContent="⭐ "+score;
+  $("emoji").textContent=q.e;$("word").textContent=q.w;$("th").textContent="("+q.t+")";
+  $("fb").classList.add("hide");
+  ["bc","bu"].forEach(function(b){var el=$(b);el.disabled=false;el.classList.remove("right")});
+  left=TIME;tick();clearInterval(tm);
+  tm=setInterval(function(){left-=0.1;if(left<=0){left=0;tick();clearInterval(tm);answer(-1)}else tick()},100);
+}
+function tick(){var f=$("fill");f.style.width=(left/TIME*100)+"%";f.classList.toggle("low",left<=5)}
+function answer(choice){
+  if(locked)return;locked=true;clearInterval(tm);
+  var q=Q[i],ok=(choice===q.c),fb=$("fb");
+  ["bc","bu"].forEach(function(b){$(b).disabled=true});
+  $(q.c?"bc":"bu").classList.add("right");
+  fb.className="fb "+(ok?"ok":"no");fb.innerHTML="";
+  var t=document.createElement("b");t.className="t";
+  var d=document.createElement("div");
+  if(ok){score+=10;$("score").textContent="⭐ "+score;
+    t.textContent=CHEER[i%CHEER.length]+"  +10 คะแนน";
+    d.textContent=q.w+" = "+(q.c?"Countable (นับได้)":"Uncountable (นับไม่ได้)")+" · "+q.why;
+  }else{missed.push(q.w);
+    t.textContent=(choice===-1?"หมดเวลาแล้ว ไม่เป็นไรนะ! ":"")+OOPS[i%OOPS.length];
+    d.textContent="เฉลย: "+q.w+" เป็น "+(q.c?"Countable (นับได้)":"Uncountable (นับไม่ได้)")+" เพราะ "+q.why;
+  }
+  var ex=document.createElement("div");ex.className="ex";ex.textContent="ตัวอย่าง: "+q.ex;
+  var n=document.createElement("button");n.className="btn";n.textContent=(i===Q.length-1?"ดูผลของฉัน":"ข้อต่อไป");
+  n.onclick=function(){i++;i<Q.length?load():finish()};
+  fb.appendChild(t);fb.appendChild(d);fb.appendChild(ex);fb.appendChild(n);
+  fb.classList.remove("hide");n.focus({preventScroll:false});
+}
+function finish(){
+  show("end");
+  var s=Math.max(1,Math.round(score/100*5));
+  $("stars").textContent="⭐".repeat(s);
+  $("final").textContent=score+" / 100";
+  $("msg").textContent=score>=80?"เก่งสุด ๆ! คุณแยกกลุ่มคำได้แม่นมาก":score>=50?"ทำได้ดีมาก! ฝึกอีกนิดจะเก่งขึ้นอีกแน่นอน":"ขอบคุณที่ลองนะ! ทุกครั้งที่เล่นคือการเรียนรู้ ลองเล่นอีกรอบดูไหม";
+  var r=$("rev");
+  if(missed.length){r.classList.remove("hide");var s2=r.querySelector("span").parentNode;
+    s2.querySelectorAll("span").forEach(function(x){x.remove()});
+    missed.forEach(function(w){var sp=document.createElement("span");sp.textContent=w;s2.appendChild(sp)});
+  }else r.classList.add("hide");
+}
+$("go").onclick=start;$("again").onclick=start;
+$("bc").onclick=function(){answer(1)};$("bu").onclick=function(){answer(0)};
+</script>
+</body>
+</html>
